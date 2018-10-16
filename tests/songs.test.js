@@ -32,6 +32,12 @@ describe("routes/songs", () => {
       name: "updated song",
       artist: "rhianna"
     };
+
+    let expectedoutput = {
+      id: 1,
+      name: "updated song",
+      artist: "rhianna"
+    };
     
     return request(app)
     .put("/songs/1")
@@ -39,7 +45,7 @@ describe("routes/songs", () => {
     
     .then(response => {
       expect(response.status).toEqual(200);
-      expect(response.body).toMatchObject(requestBody);
+      expect(response.body).toEqual(expectedoutput);
     });
   });
 
@@ -50,12 +56,18 @@ describe("routes/songs", () => {
       artist: "rhianna"
     };
 
+    let expectedoutput = {
+      id: ID,
+      name: "updated song",
+      artist: "rhianna"
+    };
+
     return request(app)
     .delete("/songs/1")
 
     .then(response => {
       expect(response.status).toEqual(200);
-      expect(response.body).toMatchObject(expected);
+      expect(response.body).toEqual(expectedoutput);
     })
   });
   

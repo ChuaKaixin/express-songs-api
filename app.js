@@ -6,6 +6,17 @@ app.use(express.json())
 
 let songs = [];
 
+app.param("id", function(req, res, next, id) {
+  let song = songs.find(song => song.id == parseInt(id));
+  /**
+  if(req.method === 'PUT') {
+    song.name = req.body.name;
+    song.artist = req.body.artist;
+  } */
+  req.song = song;
+  next();
+});
+
 //return list of all songs
 app.get('/songs', (req, res) => {
   res.status(200).json(songs);
@@ -24,24 +35,21 @@ app.post('/songs', (req, res) => {
 
 //return a song with id 
 app.get('/songs/:id', (req, res) => {
-  let song = songs.find(song => song.id == parseInt(req.params.id));
-  res.status(200).json(song);
+  res.status(200).json(req.song);
 });
 
 //edit a song with id, and return edited song
 app.put('/songs/:id', (req, res) => {
-  let song = songs.find(song => song.id === parseInt(req.params.id));
-  song.name = req.body.name;
-  song.artist = req.body.artist;
-  res.status(200).json(song);
+  req.song.name = req.body.name;
+  req.song.artist = req.body.artist;
+  res.status(200).json(req.song);
 });
 
 //delete a song with id, and return deleted song
 app.delete("/songs/:id", (req, res) => {
-  let songToDelete = songs.find(song => song.id === parseInt(req.params.id));
-  let index = songs.indexOf(songToDelete);
+  let index = songs.indexOf(req.song);
   songs.splice(index, 1);
-  res.status(200).json(songToDelete);
+  res.status(200).json(req.song);
 });
 
 module.exports = app
