@@ -8,6 +8,12 @@ let songs = [];
 
 app.param("id", function(req, res, next, id) {
   let song = songs.find(song => song.id == parseInt(id));
+  if(song) {
+    req.song = song;
+    next();
+  } else {
+    res.status(404).json({message : "Resource not founded"});
+  }
   /**
   if(req.method === 'PUT') {
     song.name = req.body.name;
@@ -53,3 +59,5 @@ app.delete("/songs/:id", (req, res) => {
 });
 
 module.exports = app
+
+//{"name":"song1", "artist":"artist1"}
